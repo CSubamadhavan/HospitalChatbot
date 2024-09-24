@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hospital Chatbot</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #0a163f; /* Dark Blue Background */
+            color: white;
+            margin: 0;
+            padding: 0;
+        }
+
+        .chat-container {
+            width: 40%;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f7f8fa;
+            border-radius: 10px;
+            box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+            color: #f7b500; /* Gold Color */
+        }
+
+        .chat-box {
+            background-color: #fefefe;
+            padding: 15px;
+            border-radius: 10px;
+            min-height: 300px;
+            max-height: 300px;
+            overflow-y: auto;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+        }
+
+        .user-input {
+            width: calc(100% - 60px);
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: white;
+        }
+
+        .query-dropdown {
+            margin-bottom: 20px;
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        .submit-btn {
+            background-color: #f7b500; /* Gold */
+            color: white;
+            border: none;
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .submit-btn:hover {
+            background-color: #c59800;
+        }
+
+        .bot-response, .user-query {
+            margin-bottom: 10px;
+        }
+
+        .user-query {
+            text-align: right;
+            color: #f54747; /* Red */
+        }
+
+        .bot-response {
+            color: #0a163f; /* Dark Blue */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="chat-container">
+        <h2>Hospital Chatbot</h2>
+        <div id="chat-box" class="chat-box">
+            <!-- Chat messages will appear here -->
+        </div>
+        
+        <!-- Input area for user queries -->
+        <input type="text" id="user-input" class="user-input" placeholder="Type your query here...">
+        
+        <!-- Dropdown for predefined queries -->
+        <select id="query-dropdown" class="query-dropdown">
+            <option value="" disabled selected>Select a  query</option>
+            <option value="What are your visiting hours?">What are your visiting hours?</option>
+            <option value="How do I book an appointment?">How do I book an appointment?</option>
+            <option value="What are your services?">What are your services?</option>
+            <option value="Can I speak to a doctor?">Can I speak to a doctor?</option>
+            <option value="Do you accept insurance?">Do you accept insurance?</option>
+        </select>
+
+        <!-- Submit button -->
+        <button class="submit-btn" onclick="submitQuery()">Submit</button>
+    </div>
+
+    <script>
+        // Function to handle submitting the user's query
+        function submitQuery() {
+            const chatBox = document.getElementById('chat-box');
+            const userInput = document.getElementById('user-input').value;
+            const queryDropdown = document.getElementById('query-dropdown');
+            const selectedQuery = queryDropdown.value;
+
+            // If user types in the input field, prioritize that
+            let query = userInput.trim() ? userInput : selectedQuery;
+
+            if (!query) {
+                alert("Please type a query or select one from the dropdown.");
+                return; // Do not send empty queries
+            }
+
+            // Display user's query
+            const userQueryDiv = document.createElement('div');
+            userQueryDiv.classList.add('user-query');
+            userQueryDiv.textContent = query;
+            chatBox.appendChild(userQueryDiv);
+
+            // Clear input and dropdown
+            document.getElementById('user-input').value = '';
+            queryDropdown.value = '';
+
+            // Scroll chat box to the bottom
+            chatBox.scrollTop = chatBox.scrollHeight;
+
+            // Simulate bot response based on the defined queries
+            const botResponseDiv = document.createElement('div');
+            botResponseDiv.classList.add('bot-response');
+            const response = getResponse(query); // Call to getResponse function
+            botResponseDiv.textContent = response;
+            chatBox.appendChild(botResponseDiv);
+
+            // Scroll chat box to the bottom again for the bot response
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        // Bot responses based on the predefined chatbot code
+        function getResponse(userInput) {
+            const lowerCaseInput = userInput.toLowerCase();
+            const intents = {
+                "What are your visiting hours?": "Our visiting hours are from 9 AM to 8 PM every day.",
+                "How do I book an appointment?": "You can book an appointment by calling us at 123-456-7890 or through our online portal at hospitalwebsite.com.",
+                "What are your services?": "We offer a wide range of services including general check-ups, surgery, maternity care, and emergency services.",
+                "Can I speak to a doctor?": "You can schedule a consultation with one of our doctors by booking an appointment. If it's an emergency, please visit our emergency room.",
+                "Do you accept insurance?": "Yes, we accept most major insurance plans. Please contact our billing department for more details."
+            };
+
+            return intents[userInput] || "Sorry, I am not sure how to respond to that. Please contact our support team at 123-456-7890 for further assistance.";
+        }
+    </script>
+
+</body>
+</html>
